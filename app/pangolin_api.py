@@ -38,12 +38,21 @@ class PangolinAPI:
                 "PANGOLIN_API_URL": os.getenv("PANGOLIN_API_URL", ""),
                 "PANGOLIN_API_KEY": os.getenv("PANGOLIN_API_KEY", ""),
                 "PANGOLIN_ORG_ID": os.getenv("PANGOLIN_ORG_ID", ""),
+                "STARTING_PRIORITY_NUMBER": os.getenv("STARTING_PRIORITY_NUMBER", "1"),
             }
         logger.debug(f"Pangolin API config after instantiation: {config}")
 
         self.base_url = config.get("PANGOLIN_API_URL", "")
         self.api_key = config.get("PANGOLIN_API_KEY", "")
         self.org_id = config.get("PANGOLIN_ORG_ID", "")
+
+        try:
+            self.starting_priority = int(
+                config.get("STARTING_PRIORITY_NUMBER", os.getenv("STARTING_PRIORITY_NUMBER", "1"))
+            )
+        except (ValueError, TypeError):
+            logger.warning("Invalid STARTING_PRIORITY_NUMBER; defaulting to 1")
+            self.starting_priority = 1
 
         # Validate required configuration
         if not self.api_key:
@@ -195,6 +204,9 @@ class PangolinAPI:
         """
         Calculate the next available priority number for a resource.
 
+        Priority starts at STARTING_PRIORITY_NUMBER (env var, default 1) and
+        increments by 1 for each additional IP added.
+
         Args:
             resource_id: ID of the resource
 
@@ -204,13 +216,13 @@ class PangolinAPI:
         try:
             rules = self.get_resource_rules(resource_id)
             if not rules:
-                return 1  # Start with priority 1 if no rules exist
+                return self.starting_priority
 
-            # Find the highest priority and add 1
             highest_priority = max(
                 (rule.get("priority", 0) for rule in rules), default=0
             )
-            next_priority = highest_priority + 1
+            # Increment from existing max, but never go below starting_priority
+            next_priority = max(highest_priority + 1, self.starting_priority)
 
             logger.debug(f"Next priority for resource {resource_id}: {next_priority}")
             return next_priority
@@ -219,7 +231,7 @@ class PangolinAPI:
             logger.error(
                 f"Error calculating next priority for resource {resource_id}: {e}"
             )
-            return 1  # Fallback to priority 1
+            return self.starting_priority
 
     def delete_rule(self, resource_id: int, rule_id: int) -> Dict[str, Any]:
         """
