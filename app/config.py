@@ -15,6 +15,9 @@ class Config:
     PANGOLIN_API_KEY = os.getenv("PANGOLIN_API_KEY", "")
     PANGOLIN_ORG_ID = os.getenv("PANGOLIN_ORG_ID", "")
 
+    # IP whitelist rule priority — first IP gets this number, each additional IP increments by 1
+    STARTING_PRIORITY_NUMBER = int(os.getenv("STARTING_PRIORITY_NUMBER", "1"))
+
     # Application settings
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB max file size
     SESSION_COOKIE_SECURE = True
