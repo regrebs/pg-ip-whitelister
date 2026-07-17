@@ -38,7 +38,7 @@ class PangolinAPI:
                 "PANGOLIN_API_URL": os.getenv("PANGOLIN_API_URL", ""),
                 "PANGOLIN_API_KEY": os.getenv("PANGOLIN_API_KEY", ""),
                 "PANGOLIN_ORG_ID": os.getenv("PANGOLIN_ORG_ID", ""),
-                "STARTING_PRIORITY_NUMBER": os.getenv("STARTING_PRIORITY_NUMBER", "1"),
+                "STARTING_PRIORITY_NUMBER": int(os.getenv("STARTING_PRIORITY_NUMBER", "1")),
             }
         logger.debug(f"Pangolin API config after instantiation: {config}")
 
@@ -47,9 +47,7 @@ class PangolinAPI:
         self.org_id = config.get("PANGOLIN_ORG_ID", "")
 
         try:
-            self.starting_priority = int(
-                config.get("STARTING_PRIORITY_NUMBER", os.getenv("STARTING_PRIORITY_NUMBER", "1"))
-            )
+            self.starting_priority = int(config.get("STARTING_PRIORITY_NUMBER", 1))
         except (ValueError, TypeError):
             logger.warning("Invalid STARTING_PRIORITY_NUMBER; defaulting to 1")
             self.starting_priority = 1
