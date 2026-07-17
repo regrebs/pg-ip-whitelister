@@ -216,10 +216,17 @@ class PangolinAPI:
             if not rules:
                 return self.starting_priority
 
-            highest_priority = max(
-                (rule.get("priority", 0) for rule in rules), default=0
-            )
-            # Increment from existing max, but never go below starting_priority
+            # Only consider existing IP whitelist rules — other rule types may have
+            # high priority numbers that would otherwise push IP rules far above
+            # the configured starting priority.
+            ip_rules = [
+                r for r in rules
+                if r.get("match") == "IP" and r.get("action") == "ACCEPT"
+            ]
+            if not ip_rules:
+                return self.starting_priority
+
+            highest_priority = max(r.get("priority", 0) for r in ip_rules)
             next_priority = max(highest_priority + 1, self.starting_priority)
 
             logger.debug(f"Next priority for resource {resource_id}: {next_priority}")
