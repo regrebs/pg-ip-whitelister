@@ -1,0 +1,44 @@
+# Version control
+.git
+.gitignore
+
+# Dev / CI tooling
+.pre-commit-config.yaml
+bandit.yaml
+pytest.ini
+run_tests.sh
+build-and-push.sh
+
+# Tests
+tests/
+
+# Docs
+*.md
+CHANGELOG.md
+FEATURE_IP_MANAGEMENT.md
+
+# Python artefacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Local env
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
