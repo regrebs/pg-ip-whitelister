@@ -27,9 +27,10 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     FLASK_APP=app \
-    FLASK_ENV=production \
-    # Tell Python not to allocate a large initial heap
-    MALLOC_TRIM_THRESHOLD_=65536
+    FLASK_ENV=production
+
+# Tell glibc to return freed memory to the OS sooner (reduces idle RSS)
+ENV MALLOC_TRIM_THRESHOLD_=65536
 
 # curl is only needed for the health check
 RUN apk add --no-cache curl
