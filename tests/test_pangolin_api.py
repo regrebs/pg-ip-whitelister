@@ -186,11 +186,16 @@ class TestPangolinAPI:
 
     @patch.object(PangolinAPI, "get_resource_rules")
     def test_get_next_priority(self, mock_get_rules):
-        """Test next priority calculation."""
+        """Test next priority calculation.
+
+        Only IP/ACCEPT rules count; other rule types (even with a higher
+        priority) must be ignored.
+        """
         mock_get_rules.return_value = [
-            {"priority": 1},
-            {"priority": 3},
-            {"priority": 5},
+            {"match": "IP", "action": "ACCEPT", "priority": 1},
+            {"match": "IP", "action": "ACCEPT", "priority": 3},
+            {"match": "IP", "action": "ACCEPT", "priority": 5},
+            {"match": "PATH", "action": "DROP", "priority": 100},
         ]
 
         api = PangolinAPI()

@@ -302,7 +302,7 @@ class PangolinAPI:
             )
             return {
                 "success": False,
-                "message": f"Failed to delete rule: {str(e)}",
+                "message": "Failed to delete rule",
                 "error": "API_ERROR",
             }
         except Exception as e:
@@ -311,7 +311,7 @@ class PangolinAPI:
             )
             return {
                 "success": False,
-                "message": f"Failed to delete rule: {str(e)}",
+                "message": "Failed to delete rule",
                 "error": "UNEXPECTED_ERROR",
             }
 
@@ -410,7 +410,7 @@ class PangolinAPI:
             )
             return {
                 "success": False,
-                "message": f"Failed to delete IP rules: {str(e)}",
+                "message": "Failed to delete IP rules",
                 "error": "UNEXPECTED_ERROR",
             }
 
@@ -486,7 +486,7 @@ class PangolinAPI:
             )
             return {
                 "success": False,
-                "message": f"Failed to replace IP whitelist: {str(e)}",
+                "message": "Failed to replace IP whitelist",
                 "error": "UNEXPECTED_ERROR",
             }
 
@@ -571,7 +571,7 @@ class PangolinAPI:
             )
             return {
                 "success": False,
-                "message": f"Failed to whitelist IP: {str(e)}",
+                "message": "Failed to whitelist IP",
                 "error": "API_ERROR",
             }
         except Exception as e:
@@ -580,6 +580,6 @@ class PangolinAPI:
             )
             return {
                 "success": False,
-                "message": f"Failed to whitelist IP: {str(e)}",
+                "message": "Failed to whitelist IP",
                 "error": "UNEXPECTED_ERROR",
             }
